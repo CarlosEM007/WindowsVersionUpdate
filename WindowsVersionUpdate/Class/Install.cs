@@ -105,11 +105,17 @@ namespace WindowsVersionUpdate.Class
                 {
                     Console.WriteLine("Atualizações instaladas com sucesso.");
 
+
                     // Verifica se é necessário reiniciar o sistema
                     if (installationResult.RebootRequired)
                     {
                         Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
                         Process.Start("ShutDown", "/r");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Não é necessário atualizarz\n");
+                        Console.ReadKey();
                     }
                 }
                 else
