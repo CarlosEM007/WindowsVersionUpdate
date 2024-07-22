@@ -99,11 +99,13 @@ namespace WindowsVersionUpdate.Class
 
                 Console.WriteLine("Iniciando a instalação das atualizações...");
                 IInstallationResult installationResult = updateInstaller.Install();
+                Console.ReadKey();
 
                 // Verifica se a instalação foi bem-sucedida
                 if (installationResult.ResultCode == OperationResultCode.orcSucceeded)
                 {
                     Console.WriteLine("Atualizações instaladas com sucesso.");
+                    Console.ReadKey();
 
 
                     // Verifica se é necessário reiniciar o sistema
@@ -111,6 +113,7 @@ namespace WindowsVersionUpdate.Class
                     {
                         Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
                         Process.Start("ShutDown", "/r");
+                        Console.ReadKey();
                     }
                     else
                     {
@@ -121,11 +124,13 @@ namespace WindowsVersionUpdate.Class
                 else
                 {
                     Console.WriteLine("A instalação das atualizações falhou. Código de resultado: " + installationResult.ResultCode);
+                    Console.ReadKey();
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Erro durante a instalação das atualizações: " + ex.Message);
+                Console.ReadKey();
             }
         }
     }
