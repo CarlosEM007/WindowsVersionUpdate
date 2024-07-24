@@ -12,11 +12,6 @@ class Program
                 
                 EnableUpdateServices();
 
-                //InstallUpdates(DownloadUpdates());
-
-                Console.WriteLine("\nPrecione qualquer tecla para continuar");
-                Console.ReadLine();
-                Console.Clear();
             }
             else
             {
