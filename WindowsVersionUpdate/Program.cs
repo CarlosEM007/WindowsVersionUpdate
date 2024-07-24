@@ -4,6 +4,8 @@ class Program
 {
     static void Main()
     {
+        Console.WriteLine("Bem vindo ao programa");
+        Console.Read();
 
         if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
         {
@@ -12,9 +14,10 @@ class Program
                 
                 EnableUpdateServices();
                 InstallUpdates(DownloadUpdates());
+                Console.Read();
             }
             else
-            {
+            { 
                 Console.WriteLine("Nenhuma atualização Disponível");
                 System.Threading.Thread.Sleep(1000);
                 Environment.Exit(0);
