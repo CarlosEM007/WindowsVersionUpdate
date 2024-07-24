@@ -1,26 +1,36 @@
-﻿using System;
-using WUApiLib;
+﻿using WUApiLib;
 
 class Program
 {
     static void Main()
     {
-        if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+
+        if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
         {
             if (NotInstalledUpdates())
             {
+                
                 EnableUpdateServices();
 
+                //InstallUpdates(DownloadUpdates());
+
+                Console.WriteLine("\nPrecione qualquer tecla para continuar");
+                Console.ReadLine();
+                Console.Clear();
+            }
+            else
+            {
+                Console.WriteLine("Nenhuma atualização Disponível");
+                System.Threading.Thread.Sleep(1000);
+                Environment.Exit(0);
             }
         }
         else
         {
             Environment.Exit(0);
         }
-        
     }
 
-    //Checks for all required updates
     public static bool NotInstalledUpdates()
     {
         //Session var
@@ -33,31 +43,22 @@ class Program
 
         //filter for a Not Installed and Not Hidden update        
         ISearchResult SearchResults = UpdateSearchResult.Search("IsInstalled=0 AND IsHidden=0");
-        
+
         Console.WriteLine("Updates Disponíveis: \n");
 
-        if (SearchResults != null)
+        if (SearchResults.Updates.Count > 0)
         {
             foreach (IUpdate x in SearchResults.Updates)
             {
                 Console.WriteLine(x.Title);
             }
             return true;
-        } 
+        }
         else
         {
             Console.WriteLine("Não possui Atualizações");
             return false;
         }
-    }
-    
-    public static void InstallUpdates()
-    {
-        UpdateSession updateSession = new UpdateSession();
-
-        UpdateInstaller UpdateInstaller = updateSession.CreateUpdateInstaller() as UpdateInstaller;
-
-        UpdateInstaller.Updates = Downloaded
     }
 
     public static UpdateCollection DownloadUpdates()
@@ -72,7 +73,7 @@ class Program
         IUpdateSearcher SearchUpdates = UpdateSession.CreateUpdateSearcher();
 
         //filter for a Not Installed and Not available update
-        ISearchResult UpdateSearchResult = SearchUpdates.Search("IsInstalled=0 and IsPresent=0");
+        ISearchResult UpdateSearchResult = SearchUpdates.Search("IsInstalled=0 AND IsHidden=0");
 
         //Store all updates to Download
         UpdateCollection UpdateCollection = new UpdateCollection();
@@ -87,7 +88,7 @@ class Program
             }
             UpdateCollection.Add(Updates);
         }
-      
+
         if (UpdateSearchResult.Updates.Count > 0)
         {
             UpdateCollection DownloadCollection = new UpdateCollection();
@@ -118,7 +119,46 @@ class Program
         }
         else
             return UpdateCollection;
-        
+
+    }
+
+    public static void InstallUpdates(UpdateCollection downloadedUpdates)
+    {
+        if (downloadedUpdates.Count > 0)
+        {
+            // Cria uma nova sessão de atualização
+            UpdateSession updateSession = new UpdateSession();
+            // Cria o instalador de atualizações
+            IUpdateInstaller updateInstaller = updateSession.CreateUpdateInstaller();
+
+            // Atribui a coleção de atualizações baixadas ao instalador
+            updateInstaller.Updates = downloadedUpdates;
+
+            Console.WriteLine("Iniciando a instalação das atualizações...");
+
+            // Inicia o processo de instalação
+            IInstallationResult installationResult = updateInstaller.Install();
+
+            // Verifica se a instalação foi bem-sucedida
+            if (installationResult.ResultCode == OperationResultCode.orcSucceeded)
+            {
+                Console.WriteLine("Atualizações instaladas com sucesso.");
+
+                // Verifica se é necessário reiniciar o sistema
+                if (installationResult.RebootRequired)
+                {
+                    Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("A instalação das atualizações falhou. Código de resultado: " + installationResult.ResultCode);
+            }
+        }
+        else
+        {
+            Console.WriteLine("Não há atualizações para instalar.");
+        }
     }
 
     public static void EnableUpdateServices()
@@ -127,8 +167,6 @@ class Program
         if (!updates.ServiceEnabled)
         {
             updates.EnableService();
-        }
+        }       
     }
-
-
 }
