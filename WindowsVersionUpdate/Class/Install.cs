@@ -59,7 +59,7 @@ namespace WindowsVersionUpdate.Class
 
                 Console.WriteLine("Download concluído.");
 
-                Console.WriteLine($"Disponiveis: {installCollection.Count}");
+                Console.WriteLine($"Disponiveis: {installCollection.Count}\n");
 
                 return installCollection;
             }
@@ -78,7 +78,7 @@ namespace WindowsVersionUpdate.Class
             // Create the update installer
             IUpdateInstaller updateInstaller = updateSession.CreateUpdateInstaller();
 
-            Console.WriteLine("Iniciando a instalação das atualizações...");
+            Console.WriteLine("Iniciando a instalação das atualizações...\n");
 
             // Start the installation process
             try
@@ -89,7 +89,7 @@ namespace WindowsVersionUpdate.Class
                     if (!update.EulaAccepted)
                     {
                         update.AcceptEula();
-                        Console.WriteLine($"EULA aceito para a atualização: {update.Title}");
+                        Console.WriteLine($"EULA aceito para a atualização: {update.Title}\n");
                     }
                 }
 
@@ -108,6 +108,8 @@ namespace WindowsVersionUpdate.Class
                     if (installationResult.RebootRequired)
                     {
                         Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
+                        System.Threading.Thread.Sleep(1000);
+                        Environment.Exit(0);
                     }
                 }
                 else

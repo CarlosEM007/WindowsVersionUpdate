@@ -18,7 +18,7 @@ namespace WindowsVersionUpdate.Class
             IUpdateSearcher UpdateSearchResult = UpdateSession.CreateUpdateSearcher();
 
             //Defines that the search for updates must be done over the internet as well
-            UpdateSearchResult.Online = false; //true
+            UpdateSearchResult.Online = true;
 
             //filter for a Not Installed and Not Hidden update        
             ISearchResult SearchResults = UpdateSearchResult.Search("IsInstalled=0 AND IsHidden=0");

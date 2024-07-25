@@ -5,9 +5,10 @@ class Program
 {
     static void Main()
     {
-        if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
+        //Check if has Monday
+        if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
         {
-            // Verifica se existem atualizações não instaladas
+            //Check for updates
             if (Verify.NotInstalledUpdates())
             {
                 Console.WriteLine("Ativando o serviço de atualização...");
@@ -15,6 +16,7 @@ class Program
 
                 Console.WriteLine("Baixando e instalando atualizações...");
                 UpdateCollection updates = Install.DownloadUpdates();
+
                 if (updates.Count > 0)
                 {
                     Install.InstallUpdates(updates);
@@ -27,15 +29,10 @@ class Program
             else
             {
                 Console.WriteLine("Nenhuma atualização disponível.");
+                // Aguarda 1 segundo antes de fechar
+                System.Threading.Thread.Sleep(1000);
+                Environment.Exit(0);
             }
         }
-        else
-        {
-            Console.WriteLine("O programa só é executado às quintas-feiras.");
-        }
-
-        // Aguarda 1 segundo antes de fechar
-        System.Threading.Thread.Sleep(1000);
-        Environment.Exit(0);
     }
 }
