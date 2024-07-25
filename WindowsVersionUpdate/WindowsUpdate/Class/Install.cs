@@ -2,7 +2,7 @@
 
 namespace WindowsVersionUpdate.Class
 {
-    public static class InstallUpdate
+    public static class Install
     {
         public static UpdateCollection DownloadUpdates()
         {

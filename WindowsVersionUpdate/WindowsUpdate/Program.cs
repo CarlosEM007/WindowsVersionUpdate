@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using WindowsVersionUpdate.Class;
+﻿using WindowsVersionUpdate.Class;
 using WUApiLib;
 
 class Program
@@ -16,11 +15,11 @@ class Program
                 Verify.EnableUpdateServices();
 
                 Console.WriteLine("Baixando e instalando atualizações...");
-                UpdateCollection updates = InstallUpdate.DownloadUpdates();
+                UpdateCollection updates = Install.DownloadUpdates();
 
                 if (updates.Count > 0)
                 {
-                    InstallUpdate.InstallUpdates(updates);
+                    Install.InstallUpdates(updates);
                 }
                 else
                 {
