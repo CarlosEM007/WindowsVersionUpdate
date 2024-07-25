@@ -85,20 +85,33 @@ namespace WindowsVersionUpdate.Class
             // Start the installation process
             try
             {
-                // Assigns the collection of downloaded updates to the installer
+                // Aceita o EULA para cada atualização se ainda não for aceito
+                foreach (IUpdate update in downloadedUpdates)
+                {
+                    if (!update.EulaAccepted)
+                    {
+                        update.AcceptEula();
+                        Console.WriteLine($"EULA aceito para a atualização: {update.Title}");
+                    }
+                }
+
+                // Atribui a coleção de atualizações baixadas ao instalador
                 updateInstaller.Updates = downloadedUpdates;
 
+                Console.WriteLine("Iniciando a instalação das atualizações...");
                 IInstallationResult installationResult = updateInstaller.Install();
 
                 // Verifica se a instalação foi bem-sucedida
                 if (installationResult.ResultCode == OperationResultCode.orcSucceeded)
                 {
                     Console.WriteLine("Atualizações instaladas com sucesso.");
+                    Console.ReadKey();
 
                     // Verifica se é necessário reiniciar o sistema
                     if (installationResult.RebootRequired)
                     {
                         Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
+                        Console.ReadKey();
                     }
                 }
                 else
@@ -110,6 +123,7 @@ namespace WindowsVersionUpdate.Class
             {
                 Console.WriteLine("Erro durante a instalação das atualizações: " + ex.Message);
             }
+
 
         }
     }

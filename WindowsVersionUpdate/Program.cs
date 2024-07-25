@@ -1,4 +1,5 @@
-﻿using WUApiLib;
+﻿using System;
+using WUApiLib;
 using WindowsVersionUpdate.Class;
 
 class Program
@@ -7,27 +8,35 @@ class Program
     {
         if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
         {
-            //Check for updates to make
+            // Verifica se existem atualizações não instaladas
             if (Verify.NotInstalledUpdates())
             {
-                Console.WriteLine("aTiva os serviçoes");
+                Console.WriteLine("Ativando o serviço de atualização...");
                 Verify.EnableUpdateServices();
 
-                Console.WriteLine("Instalando eles");
-                Install.InstallUpdates(Install.DownloadUpdates());
+                Console.WriteLine("Baixando e instalando atualizações...");
+                UpdateCollection updates = Install.DownloadUpdates();
+                if (updates.Count > 0)
+                {
+                    Install.InstallUpdates(updates);
+                }
+                else
+                {
+                    Console.WriteLine("Nenhuma atualização disponível para instalação.");
+                }
             }
             else
-            { 
-                Console.WriteLine("Nenhuma atualização Disponível");
-
-                //Wait 1 second to close
-                System.Threading.Thread.Sleep(1000);
-                Environment.Exit(0);
+            {
+                Console.WriteLine("Nenhuma atualização disponível.");
             }
         }
         else
         {
-            Environment.Exit(0);
+            Console.WriteLine("O programa só é executado às quintas-feiras.");
         }
-    }  
+
+        // Aguarda 1 segundo antes de fechar
+        System.Threading.Thread.Sleep(1000);
+        Environment.Exit(0);
+    }
 }
