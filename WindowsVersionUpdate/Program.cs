@@ -13,11 +13,12 @@ class Program
                 EnableUpdateServices();
 
                 InstallUpdates(DownloadUpdates());
-                Console.Read();
             }
             else
             { 
                 Console.WriteLine("Nenhuma atualização Disponível");
+
+                //Wait 1 second to close
                 System.Threading.Thread.Sleep(1000);
                 Environment.Exit(0);
             }
