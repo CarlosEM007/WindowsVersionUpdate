@@ -4,15 +4,14 @@ class Program
 {
     static void Main()
     {
-        Console.WriteLine("Bem vindo ao programa");
-        Console.Read();
-
         if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
         {
+            //Check for updates to make
             if (NotInstalledUpdates())
             {
-                
+                //Ace
                 EnableUpdateServices();
+
                 InstallUpdates(DownloadUpdates());
                 Console.Read();
             }
@@ -61,7 +60,6 @@ class Program
 
     public static UpdateCollection DownloadUpdates()
     {
-
         //Search for updates in the Microsoft database
 
         //Session var
@@ -70,7 +68,7 @@ class Program
         //Search Updates
         IUpdateSearcher SearchUpdates = UpdateSession.CreateUpdateSearcher();
 
-        //filter for a Not Installed and Not available update
+        //filter for a Not Installed and Not hidden updates
         ISearchResult UpdateSearchResult = SearchUpdates.Search("IsInstalled=0 AND IsHidden=0");
 
         //Store all updates to Download
