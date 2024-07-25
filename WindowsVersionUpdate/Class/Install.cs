@@ -54,9 +54,7 @@ namespace WindowsVersionUpdate.Class
                 UpdateCollection installCollection = new UpdateCollection();
                 for (int i = 0; i < downloadCollection.Count; i++)
                 {
-
                     installCollection.Add(downloadCollection[i]);
-
                 }
 
                 Console.WriteLine("Download concluído.");
@@ -105,14 +103,11 @@ namespace WindowsVersionUpdate.Class
                 if (installationResult.ResultCode == OperationResultCode.orcSucceeded)
                 {
                     Console.WriteLine("Atualizações instaladas com sucesso.");
-                    Console.ReadKey();
 
                     // Verifica se é necessário reiniciar o sistema
                     if (installationResult.RebootRequired)
                     {
                         Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
-                        Console.ReadKey();
-
                     }
                 }
                 else
@@ -124,8 +119,6 @@ namespace WindowsVersionUpdate.Class
             {
                 Console.WriteLine("Erro durante a instalação das atualizações: " + ex.Message);
             }
-
-
         }
     }
 }

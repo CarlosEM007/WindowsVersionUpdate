@@ -1,6 +1,5 @@
-﻿using System;
+﻿using WindowsVersionUpdate.Class;
 using WUApiLib;
-using WindowsVersionUpdate.Class;
 
 class Program
 {

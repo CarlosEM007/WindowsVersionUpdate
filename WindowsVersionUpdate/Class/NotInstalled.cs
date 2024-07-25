@@ -41,7 +41,6 @@ namespace WindowsVersionUpdate.Class
             {
 
                 Console.WriteLine("Não possui Atualizações");
-                Console.ReadKey();
                 return false;
             }
         }
