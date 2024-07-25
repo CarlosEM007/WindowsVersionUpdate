@@ -72,7 +72,6 @@ namespace WindowsVersionUpdate.Class
             }
         }
 
-
         public static void InstallUpdates(UpdateCollection downloadedUpdates)
         {
             // Create a new update session
@@ -86,18 +85,6 @@ namespace WindowsVersionUpdate.Class
             // Start the installation process
             try
             {
-                Console.WriteLine("Iniciando a instalação das atualizações...");
-                for(int i = 0; i < updateInstaller.Updates.Count; i++)
-                {
-                    IUpdate update = updateInstaller.Updates[i];
-                    if (!update.EulaAccepted)
-                    {
-                        update.AcceptEula();
-                    }
-
-                    downloadedUpdates.Add(update);
-                }
-
                 // Assigns the collection of downloaded updates to the installer
                 updateInstaller.Updates = downloadedUpdates;
 
@@ -116,7 +103,7 @@ namespace WindowsVersionUpdate.Class
                 }
                 else
                 {
-                    Console.WriteLine("A instalação das atualizações falhou. Código de resultado: " + installationResult.ResultCode);               
+                    Console.WriteLine("A instalação das atualizações falhou. Código de resultado: " + installationResult.ResultCode);
                 }
             }
             catch (Exception ex)

@@ -10,8 +10,10 @@ class Program
             //Check for updates to make
             if (Verify.NotInstalledUpdates())
             {
+                Console.WriteLine("aTiva os serviçoes");
                 Verify.EnableUpdateServices();
 
+                Console.WriteLine("Instalando eles");
                 Install.InstallUpdates(Install.DownloadUpdates());
             }
             else
