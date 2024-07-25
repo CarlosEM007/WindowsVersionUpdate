@@ -5,7 +5,7 @@ class Program
 {
     static void Main()
     {
-        if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
+        if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
         {
             //Check for updates to make
             if (Verify.NotInstalledUpdates())

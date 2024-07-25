@@ -72,8 +72,7 @@ namespace WindowsVersionUpdate.Class
         }
         public static void InstallUpdates(UpdateCollection downloadedUpdates)
         {
-            if (downloadedUpdates.Count > 0)
-            {
+
                 // Create a new update session
                 UpdateSession updateSession = new UpdateSession();
 
@@ -103,11 +102,6 @@ namespace WindowsVersionUpdate.Class
                 {
                     Console.WriteLine("A instalação das atualizações falhou. Código de resultado: " + installationResult.ResultCode);
                 }
-            }
-            else
-            {
-                Console.WriteLine("Não há atualizações para instalar.");
-            }
         }
     }
 }
