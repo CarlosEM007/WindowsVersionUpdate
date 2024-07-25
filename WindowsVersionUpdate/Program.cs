@@ -13,11 +13,12 @@ class Program
                 EnableUpdateServices();
 
                 InstallUpdates(DownloadUpdates());
-                Console.Read();
             }
             else
             { 
                 Console.WriteLine("Nenhuma atualização Disponível");
+
+                //Wait 1 second to close
                 System.Threading.Thread.Sleep(1000);
                 Environment.Exit(0);
             }
@@ -36,6 +37,7 @@ class Program
         //Search Updates
         IUpdateSearcher UpdateSearchResult = UpdateSession.CreateUpdateSearcher();
 
+        //Defines that the search for updates must be done over the internet as well
         UpdateSearchResult.Online = true;
 
         //filter for a Not Installed and Not Hidden update        
@@ -53,6 +55,7 @@ class Program
         }
         else
         {
+
             Console.WriteLine("Não possui Atualizações");
             return false;
         }
@@ -88,6 +91,8 @@ class Program
         if (UpdateSearchResult.Updates.Count > 0)
         {
             UpdateCollection DownloadCollection = new UpdateCollection();
+
+            //Download object
             UpdateDownloader Downloader = UpdateSession.CreateUpdateDownloader();
 
             for (int i = 0; i < UpdateCollection.Count; i++)
@@ -122,25 +127,26 @@ class Program
     {
         if (downloadedUpdates.Count > 0)
         {
-            // Cria uma nova sessão de atualização
+            // Create a new update session
             UpdateSession updateSession = new UpdateSession();
-            // Cria o instalador de atualizações
+
+            // Create the update installer
             IUpdateInstaller updateInstaller = updateSession.CreateUpdateInstaller();
 
-            // Atribui a coleção de atualizações baixadas ao instalador
+            // Assigns the collection of downloaded updates to the installer
             updateInstaller.Updates = downloadedUpdates;
 
             Console.WriteLine("Iniciando a instalação das atualizações...");
 
-            // Inicia o processo de instalação
+            // Start the installation process
             IInstallationResult installationResult = updateInstaller.Install();
 
-            // Verifica se a instalação foi bem-sucedida
+            // Checks whether the installation was successful
             if (installationResult.ResultCode == OperationResultCode.orcSucceeded)
             {
                 Console.WriteLine("Atualizações instaladas com sucesso.");
 
-                // Verifica se é necessário reiniciar o sistema
+                // Checks if it is necessary to restart the system
                 if (installationResult.RebootRequired)
                 {
                     Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
