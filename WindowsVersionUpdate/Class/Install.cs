@@ -112,6 +112,7 @@ namespace WindowsVersionUpdate.Class
                     {
                         Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
                         Console.ReadKey();
+
                     }
                 }
                 else
