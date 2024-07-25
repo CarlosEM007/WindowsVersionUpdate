@@ -33,7 +33,7 @@ namespace WindowsVersionUpdate.Class
                     Console.WriteLine($"Titulo: {x.Title}");
                     Console.WriteLine($"Descrição: {x.Description}");
                     Console.WriteLine($"Instalada: {x.IsInstalled}");
-                    Console.WriteLine($"Obrigatório{x.IsMandatory}\n");
+                    Console.WriteLine($"Obrigatório: {x.IsMandatory}\n");
                 }
                 return true;
             }
