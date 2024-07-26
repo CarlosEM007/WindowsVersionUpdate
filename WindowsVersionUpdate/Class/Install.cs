@@ -46,7 +46,6 @@ namespace WindowsVersionUpdate.Class
                 }
 
                 downloader.Updates = downloadCollection;
-                Console.WriteLine("Baixando atualizações... Isso pode levar alguns minutos.");
 
                 // Start the download process
                 IDownloadResult downloadResult = downloader.Download();
@@ -58,15 +57,10 @@ namespace WindowsVersionUpdate.Class
                     installCollection.Add(downloadCollection[i]);
                 }
 
-                Console.WriteLine("Download concluído.");
-
-                Console.WriteLine($"Disponiveis: {installCollection.Count}\n");
-
                 return installCollection;
             }
             else
             {
-                Console.WriteLine("Nenhuma atualização disponível para download.");
                 return new UpdateCollection();
             }
         }
@@ -79,8 +73,6 @@ namespace WindowsVersionUpdate.Class
             // Create the update installer
             IUpdateInstaller updateInstaller = updateSession.CreateUpdateInstaller();
 
-            Console.WriteLine("Iniciando a instalação das atualizações...\n");
-
             // Start the installation process
             try
             {
@@ -90,36 +82,24 @@ namespace WindowsVersionUpdate.Class
                     if (!update.EulaAccepted)
                     {
                         update.AcceptEula();
-                        Console.WriteLine($"EULA aceito para a atualização: {update.Title}\n");
                     }
                 }
 
                 // Atribui a coleção de atualizações baixadas ao instalador
                 updateInstaller.Updates = downloadedUpdates;
 
-                Console.WriteLine("Iniciando a instalação das atualizações...");
                 IInstallationResult installationResult = updateInstaller.Install();
                 Console.ReadKey();
 
                 // Verifica se a instalação foi bem-sucedida
                 if (installationResult.ResultCode == OperationResultCode.orcSucceeded)
                 {
-                    Console.WriteLine("Atualizações instaladas com sucesso.");
                     Console.ReadKey();
-
 
                     // Verifica se é necessário reiniciar o sistema
                     if (installationResult.RebootRequired)
                     {
-                        Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
                         Process.Start("ShutDown", "/r");
-                        Console.ReadKey();
-                    }
-                    else
-                    {
-
-                        Console.WriteLine("Não é necessário atualizarz\n");
-                        Console.ReadKey();
                     }
                 }
                 else
@@ -131,7 +111,6 @@ namespace WindowsVersionUpdate.Class
             catch (Exception ex)
             {
                 Console.WriteLine("Erro durante a instalação das atualizações: " + ex.Message);
-                Console.ReadKey();
             }
         }
     }

@@ -23,24 +23,12 @@ namespace WindowsVersionUpdate.Class
             //filter for a Not Installed and Not Hidden update        
             ISearchResult SearchResults = UpdateSearchResult.Search("IsInstalled=0 AND IsHidden=0");
 
-            Console.WriteLine("Updates Disponíveis: \n");
-
             if (SearchResults.Updates.Count > 0)
             {
-                foreach (IUpdate x in SearchResults.Updates)
-                {
-                    Console.WriteLine("----------------------------------");
-                    Console.WriteLine($"Titulo: {x.Title}");
-                    Console.WriteLine($"Descrição: {x.Description}");
-                    Console.WriteLine($"Instalada: {x.IsInstalled}");
-                    Console.WriteLine($"Obrigatório: {x.IsMandatory}\n");
-                }
                 return true;
             }
             else
             {
-
-                Console.WriteLine("Não possui Atualizações");
                 return false;
             }
         }
