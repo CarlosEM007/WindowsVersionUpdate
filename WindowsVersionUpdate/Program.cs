@@ -1,12 +1,11 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using WindowsVersionUpdate.Class;
+﻿using WindowsVersionUpdate.Class;
 using WUApiLib;
 
 class Program
 {
     static void Main()
     {
-        //Check if has Monday
+        //Check if it's Monday
         if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
         {
             //Check for updates

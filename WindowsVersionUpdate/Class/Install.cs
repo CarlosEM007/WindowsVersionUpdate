@@ -1,4 +1,5 @@
 ﻿using WUApiLib;
+using System.Diagnostics;
 
 namespace WindowsVersionUpdate.Class
 {
@@ -108,8 +109,7 @@ namespace WindowsVersionUpdate.Class
                     if (installationResult.RebootRequired)
                     {
                         Console.WriteLine("É necessário reiniciar o sistema para concluir a instalação das atualizações.");
-                        System.Threading.Thread.Sleep(1000);
-                        Environment.Exit(0);
+                        Process.Start("ShutDown", "/r");
                     }
                 }
                 else
