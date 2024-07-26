@@ -117,6 +117,7 @@ namespace WindowsVersionUpdate.Class
                     }
                     else
                     {
+
                         Console.WriteLine("Não é necessário atualizarz\n");
                         Console.ReadKey();
                     }
