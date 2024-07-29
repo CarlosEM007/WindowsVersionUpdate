@@ -11,6 +11,10 @@ class Program
             //Check for updates
             if (Verify.NotInstalledUpdates())
             {
+                Console.WriteLine("Possui atualizações!");
+                Console.Write("Aperte qualquer tecla para continuar...");
+                Console.ReadLine();
+
                 Verify.EnableUpdateServices();
 
                 UpdateCollection updates = InstallUpdate.DownloadUpdates();
@@ -22,8 +26,12 @@ class Program
             }
             else
             {
+                Console.WriteLine("Não possui atualizações!");
+                Console.Write("Aperte qualquer tecla para continuar...");
+                Console.ReadLine();
+
                 // Aguarda 1 segundo antes de fechar
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(10000);
                 Environment.Exit(0);
             }
         }
