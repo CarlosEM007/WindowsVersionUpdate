@@ -8,6 +8,7 @@ class Program
         //Check if it's Monday
         if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
         {
+            Console.WriteLine("Buscando atualizações...");
             //Check for updates
             if (Verify.NotInstalledUpdates())
             {
