@@ -1,36 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WUApiLib;
 
 namespace WindowsVersionUpdate.Class
 {
-    public static class Verify
+    public sealed class Verify
     {
         public static bool NotInstalledUpdates()
         {
-            //Session var
-            UpdateSession UpdateSession = new UpdateSession();
+            // Create a session and search for updates
+            IUpdateSearcher updateSearcher = new UpdateSession().CreateUpdateSearcher();
+            updateSearcher.Online = true; // Ensure search is performed online
 
-            //Search Updates
-            IUpdateSearcher UpdateSearchResult = UpdateSession.CreateUpdateSearcher();
+            // Search for updates that are not installed and not hidden
+            ISearchResult searchResults = updateSearcher.Search("IsInstalled=0 AND IsHidden=0");
 
-            //Defines that the search for updates must be done over the internet as well
-            UpdateSearchResult.Online = true;
-
-            //filter for a Not Installed and Not Hidden update        
-            ISearchResult SearchResults = UpdateSearchResult.Search("IsInstalled=0 AND IsHidden=0");
-
-            if (SearchResults.Updates.Count > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            // Return true if updates are found, otherwise false
+            return searchResults.Updates.Count > 0;
         }
 
         public static void EnableUpdateServices()

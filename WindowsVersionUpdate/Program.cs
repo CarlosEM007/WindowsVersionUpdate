@@ -1,37 +1,37 @@
-﻿using WindowsVersionUpdate.Class;
+﻿using System;
+using WindowsVersionUpdate.Class;
 using WUApiLib;
 
 class Program
 {
-    static void Main()
+    static async Task Main()
     {
-        //Check if it's Monday
-        if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+        if (DateTime.Now.DayOfWeek != DayOfWeek.Monday)
         {
-            Console.WriteLine("Buscando atualizações...\n");
-            //Check for updates
-            if (Verify.NotInstalledUpdates())
+            // Fecha imediatamente se não for segunda-feira
+            Console.WriteLine("Hoje não é segunda-feira. O programa será fechado.");
+            return;
+        }
+
+        Console.WriteLine("Buscando atualizações...\n");
+
+        if (Verify.NotInstalledUpdates())
+        {
+            Console.WriteLine("Atualizações encontradas!\n");
+
+            Verify.EnableUpdateServices();
+
+            Console.WriteLine("Instalando atualizações... (Isso pode levar alguns minutos!)\n");
+            UpdateCollection updates = InstallUpdate.DownloadUpdates();
+
+            if (updates.Count > 0)
             {
-                Console.WriteLine("Atualizações encontradas!\n");
-
-                Verify.EnableUpdateServices();
-
-                Console.WriteLine("Instalando atualizações... (Isso pode levar alguns minutos!)\n");
-                UpdateCollection updates = InstallUpdate.DownloadUpdates();
-
-                if (updates.Count > 0)
-                {
-
-                    InstallUpdate.InstallUpdates(updates);
-                }
+                await InstallUpdate.InstallUpdatesAsync(updates);
             }
-            else
-            {
-                Console.WriteLine("Sem atualizações!");
-                // Aguarda 1 segundo antes de fechar
-                System.Threading.Thread.Sleep(1000);
-                Environment.Exit(0);
-            }      
+        }
+        else
+        {
+            Console.WriteLine("Sem atualizações!");
         }
     }
 }

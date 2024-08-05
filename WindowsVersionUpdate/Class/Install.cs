@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using WUApiLib;
 
 namespace WindowsVersionUpdate.Class
 {
-    public static class InstallUpdate
+    public sealed class InstallUpdate
     {
         public static UpdateCollection DownloadUpdates()
         {
@@ -24,16 +25,13 @@ namespace WindowsVersionUpdate.Class
             Parallel.For(0, updateCount, i =>
             {
                 IUpdate update = updateSearchResult.Updates[i];
-                if (!IsSpecificDriver(update))
+                if (!IsSpecificDriver(update) && !update.EulaAccepted)
                 {
-                    if (!update.EulaAccepted)
-                    {
-                        update.AcceptEula();
-                    }
-                    lock (updateCollection)
-                    {
-                        updateCollection.Add(update);
-                    }
+                    update.AcceptEula();
+                }
+                lock (updateCollection)
+                {
+                    updateCollection.Add(update);
                 }
             });
 
@@ -49,11 +47,8 @@ namespace WindowsVersionUpdate.Class
 
                 // Collection for updates that were downloaded successfully
                 UpdateCollection installCollection = new UpdateCollection();
-                int downloadCount = updateCollection.Count;
-
-                for (int i = 0; i < downloadCount; i++)
+                foreach (IUpdate update in updateCollection)
                 {
-                    IUpdate update = updateCollection[i];
                     if (!IsSpecificDriver(update))
                     {
                         installCollection.Add(update);
@@ -68,8 +63,7 @@ namespace WindowsVersionUpdate.Class
             }
         }
 
-
-        public static void InstallUpdates(UpdateCollection downloadedUpdates)
+        public static async Task InstallUpdatesAsync(UpdateCollection downloadedUpdates)
         {
             // Create a new update session
             UpdateSession updateSession = new UpdateSession();
@@ -77,7 +71,6 @@ namespace WindowsVersionUpdate.Class
             // Create the update installer
             IUpdateInstaller updateInstaller = updateSession.CreateUpdateInstaller();
 
-            // Start the installation process
             try
             {
                 // Aceita o EULA para cada atualização se ainda não for aceito
@@ -92,7 +85,8 @@ namespace WindowsVersionUpdate.Class
                 // Atribui a coleção de atualizações baixadas ao instalador
                 updateInstaller.Updates = downloadedUpdates;
 
-                IInstallationResult installationResult = updateInstaller.Install();
+                // Start the installation process
+                IInstallationResult installationResult = await Task.Run(() => updateInstaller.Install());
 
                 // Verifica se a instalação foi bem-sucedida
                 if (installationResult.ResultCode == OperationResultCode.orcSucceeded)
@@ -107,29 +101,19 @@ namespace WindowsVersionUpdate.Class
                 else
                 {
                     Console.WriteLine("A instalação das atualizações falhou. Código de resultado: " + installationResult.ResultCode);
-                    System.Threading.Thread.Sleep(1000);
-                    Environment.Exit(0);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Erro durante a instalação das atualizações: " + ex.Message);
-                System.Threading.Thread.Sleep(1000);
-                Environment.Exit(0);
             }
         }
+
         static bool IsSpecificDriver(IUpdate update)
         {
             // Verifica se o título ou descrição contém palavras-chave que identificam drivers específicos
-            string[] keywords = { "driver", "nvidia", "intel", "graphic", "amd" }; // Adicione as palavras-chave conforme necessário
-            foreach (string keyword in keywords)
-            {
-                if (update.Title.ToLower().Contains(keyword) || update.Description.ToLower().Contains(keyword))
-                {
-                    return true;
-                }
-            }
-            return false;
+            string[] keywords = { "driver", "nvidia", "intel", "graphic", "amd" };
+            return keywords.Any(keyword => update.Title.ToLower().Contains(keyword) || update.Description.ToLower().Contains(keyword));
         }
     }
 }
