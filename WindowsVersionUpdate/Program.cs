@@ -16,11 +16,12 @@ class Program
 
                 Verify.EnableUpdateServices();
 
+                Console.WriteLine("Instalando atualizações... (Isso pode levar alguns minutos!)\n");
                 UpdateCollection updates = InstallUpdate.DownloadUpdates();
 
                 if (updates.Count > 0)
                 {
-                    Console.WriteLine("Instalando atualizações... (Isso pode levar alguns minutos!)\n");
+
                     InstallUpdate.InstallUpdates(updates);
                 }
             }

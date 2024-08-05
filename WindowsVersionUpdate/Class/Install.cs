@@ -20,17 +20,20 @@ namespace WindowsVersionUpdate.Class
             UpdateCollection updateCollection = new UpdateCollection();
             int updateCount = updateSearchResult.Updates.Count;
 
-            // Accept EULA for each update if not already accepted
+            // Accept EULA for each update if not already accepted and not a specific driver
             Parallel.For(0, updateCount, i =>
             {
                 IUpdate update = updateSearchResult.Updates[i];
-                if (!update.EulaAccepted)
+                if (!IsSpecificDriver(update))
                 {
-                    update.AcceptEula();
-                }
-                lock (updateCollection)
-                {
-                    updateCollection.Add(update);
+                    if (!update.EulaAccepted)
+                    {
+                        update.AcceptEula();
+                    }
+                    lock (updateCollection)
+                    {
+                        updateCollection.Add(update);
+                    }
                 }
             });
 
@@ -61,7 +64,9 @@ namespace WindowsVersionUpdate.Class
             }
         }
 
-        public static void InstallUpdates(UpdateCollection downloadedUpdates)
+    }
+
+    public static void InstallUpdates(UpdateCollection downloadedUpdates)
         {
             // Create a new update session
             UpdateSession updateSession = new UpdateSession();
@@ -109,6 +114,19 @@ namespace WindowsVersionUpdate.Class
                 System.Threading.Thread.Sleep(1000);
                 Environment.Exit(0);
             }
+        }
+        static bool IsSpecificDriver(IUpdate update)
+        {
+            // Verifica se o título ou descrição contém palavras-chave que identificam drivers específicos
+            string[] keywords = { "driver", "nvidia", "intel", "graphic", "amd" }; // Adicione as palavras-chave conforme necessário
+            foreach (string keyword in keywords)
+            {
+                if (update.Title.ToLower().Contains(keyword) || update.Description.ToLower().Contains(keyword))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
