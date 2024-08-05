@@ -18,43 +18,39 @@ namespace WindowsVersionUpdate.Class
 
             // Store all updates to download
             UpdateCollection updateCollection = new UpdateCollection();
+            int updateCount = updateSearchResult.Updates.Count;
 
             // Accept EULA for each update if not already accepted
-            for (int i = 0; i < updateSearchResult.Updates.Count; i++)
+            Parallel.For(0, updateCount, i =>
             {
                 IUpdate update = updateSearchResult.Updates[i];
                 if (!update.EulaAccepted)
                 {
                     update.AcceptEula();
                 }
-                updateCollection.Add(update);
-            }
+                lock (updateCollection)
+                {
+                    updateCollection.Add(update);
+                }
+            });
 
             // Ensure there are updates to download
             if (updateCollection.Count > 0)
             {
-                // Collection for updates that will be downloaded
-                UpdateCollection downloadCollection = new UpdateCollection();
-
                 // Downloader object
                 IUpdateDownloader downloader = updateSession.CreateUpdateDownloader();
-
-                // Add all available updates to download collection
-                for (int i = 0; i < updateCollection.Count; i++)
-                {
-                    downloadCollection.Add(updateCollection[i]);
-                }
-
-                downloader.Updates = downloadCollection;
+                downloader.Updates = updateCollection;
 
                 // Start the download process
                 IDownloadResult downloadResult = downloader.Download();
 
                 // Collection for updates that were downloaded successfully
                 UpdateCollection installCollection = new UpdateCollection();
-                for (int i = 0; i < downloadCollection.Count; i++)
+                int downloadCount = updateCollection.Count;
+
+                for (int i = 0; i < downloadCount; i++)
                 {
-                    installCollection.Add(downloadCollection[i]);
+                    installCollection.Add(updateCollection[i]);
                 }
 
                 return installCollection;
@@ -64,6 +60,7 @@ namespace WindowsVersionUpdate.Class
                 return new UpdateCollection();
             }
         }
+
 
         public static void InstallUpdates(UpdateCollection downloadedUpdates)
         {
@@ -114,7 +111,5 @@ namespace WindowsVersionUpdate.Class
                 Environment.Exit(0);
             }
         }
-
-
     }
 }
