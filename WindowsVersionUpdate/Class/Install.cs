@@ -1,5 +1,5 @@
-﻿using WUApiLib;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using WUApiLib;
 
 namespace WindowsVersionUpdate.Class
 {
@@ -53,7 +53,11 @@ namespace WindowsVersionUpdate.Class
 
                 for (int i = 0; i < downloadCount; i++)
                 {
-                    installCollection.Add(updateCollection[i]);
+                    IUpdate update = updateCollection[i];
+                    if (!IsSpecificDriver(update))
+                    {
+                        installCollection.Add(update);
+                    }
                 }
 
                 return installCollection;
@@ -64,9 +68,8 @@ namespace WindowsVersionUpdate.Class
             }
         }
 
-    }
 
-    public static void InstallUpdates(UpdateCollection downloadedUpdates)
+        public static void InstallUpdates(UpdateCollection downloadedUpdates)
         {
             // Create a new update session
             UpdateSession updateSession = new UpdateSession();
