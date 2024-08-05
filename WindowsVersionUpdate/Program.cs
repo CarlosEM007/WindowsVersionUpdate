@@ -20,7 +20,7 @@ class Program
 
                 if (updates.Count > 0)
                 {
-                    Console.WriteLine("Instalando atualizações...\n");
+                    Console.WriteLine("Instalando atualizações... (Isso pode levar alguns minutos!)\n");
                     InstallUpdate.InstallUpdates(updates);
                 }
             }
