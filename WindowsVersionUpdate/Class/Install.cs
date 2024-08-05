@@ -93,10 +93,10 @@ namespace WindowsVersionUpdate.Class
                 // Verifica se a instalação foi bem-sucedida
                 if (installationResult.ResultCode == OperationResultCode.orcSucceeded)
                 {
-
                     // Verifica se é necessário reiniciar o sistema
                     if (installationResult.RebootRequired)
                     {
+                        Console.WriteLine("Reinicialização necessária...");
                         Process.Start("ShutDown", "/r");
                     }
                 }
