@@ -61,7 +61,6 @@ namespace WindowsVersionUpdate.Class
             }
         }
 
-
         public static void InstallUpdates(UpdateCollection downloadedUpdates)
         {
             // Create a new update session
